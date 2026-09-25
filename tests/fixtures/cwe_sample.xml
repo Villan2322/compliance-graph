@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Weakness_Catalog xmlns="http://cwe.mitre.org/cwe-7" Name="CWE" Version="4.18" Date="2025-09-09">
+  <Weaknesses>
+    <Weakness ID="89" Name="Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')" Abstraction="Base" Structure="Simple" Status="Stable">
+      <Description>The product constructs all or part of an SQL command using externally-influenced input.</Description>
+      <Related_Weaknesses>
+        <Related_Weakness Nature="ChildOf" CWE_ID="943" View_ID="1000" Ordinal="Primary"/>
+        <Related_Weakness Nature="ChildOf" CWE_ID="74" View_ID="1003" Ordinal="Primary"/>
+      </Related_Weaknesses>
+    </Weakness>
+    <Weakness ID="943" Name="Improper Neutralization of Special Elements in Data Query Logic" Abstraction="Class" Structure="Simple" Status="Incomplete">
+      <Description>Query logic built from input.</Description>
+    </Weakness>
+    <Weakness ID="1" Name="Old" Abstraction="Base" Structure="Simple" Status="Deprecated"><Description>x</Description></Weakness>
+  </Weaknesses>
+</Weakness_Catalog>

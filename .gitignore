@@ -1,0 +1,10 @@
+.env
+sources/raw/*
+!sources/raw/.gitkeep
+out/
+state/
+dumps/*.dump
+__pycache__/
+*.egg-info/
+.pytest_cache/
+.venv/

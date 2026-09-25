@@ -1,0 +1,115 @@
+# Every dataset the graph is built from. `cgraph fetch` downloads these
+# into sources/raw/, `cgraph ingest` loads them, and each load writes a
+# (:Source) node with this metadata so every edge traces back here.
+#
+# tier 1 = redistributable, baked into the published dump
+# tier 2 = fast-moving feed, refreshed by `make refresh`
+# tier 3 = licensed text, bring-your-own (never committed, never dumped)
+#
+# Pin `version` when you cut a dump release. `sha256` is filled by
+# `cgraph fetch --pin` and checked on later fetches.
+
+sources:
+  - id: nist-800-53-r5
+    loader: nist_800_53
+    name: NIST SP 800-53 Rev. 5 control catalog (OSCAL JSON)
+    publisher: NIST
+    url: https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json
+    file: nist-800-53-r5.json
+    license: Public domain (U.S. Government work, 17 U.S.C. 105)
+    tier: 1
+
+  - id: mitre-attack-enterprise
+    loader: attack
+    name: MITRE ATT&CK Enterprise (STIX 2.1)
+    publisher: MITRE
+    url: https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/enterprise-attack/enterprise-attack.json
+    file: enterprise-attack.json
+    license: MITRE ATT&CK Terms of Use (royalty-free, reproduce with copyright notice)
+    tier: 1
+
+  - id: ctid-800-53-attack
+    loader: ctid
+    name: CTID Mappings Explorer — NIST 800-53 r5 to ATT&CK 16.1
+    publisher: MITRE Center for Threat-Informed Defense
+    url: https://raw.githubusercontent.com/center-for-threat-informed-defense/mappings-explorer/main/mappings/nist_800_53/attack-16.1/nist_800_53-rev5/enterprise/nist_800_53-rev5_attack-16.1-enterprise.json
+    file: ctid-800-53-attack.json
+    license: Apache-2.0 (verify in upstream LICENSE before release)
+    tier: 1
+    depends_on: [nist-800-53-r5, mitre-attack-enterprise]
+
+  - id: mitre-cwe
+    loader: cwe
+    name: MITRE CWE (XML)
+    publisher: MITRE
+    url: https://cwe.mitre.org/data/xml/cwec_latest.xml.zip
+    file: cwec_latest.xml.zip
+    license: CWE Terms of Use (free, reproduce with copyright notice)
+    tier: 1
+
+  - id: mitre-capec
+    loader: capec
+    name: MITRE CAPEC (XML)
+    publisher: MITRE
+    url: https://capec.mitre.org/data/xml/capec_latest.xml
+    file: capec_latest.xml
+    license: CAPEC Terms of Use (free, reproduce with copyright notice)
+    tier: 1
+    depends_on: [mitre-cwe, mitre-attack-enterprise]
+
+  - id: mitre-atlas
+    loader: atlas
+    name: MITRE ATLAS (adversarial AI threats)
+    publisher: MITRE
+    url: https://raw.githubusercontent.com/mitre-atlas/atlas-data/main/dist/ATLAS.yaml
+    file: ATLAS.yaml
+    license: Apache-2.0 (verify in upstream LICENSE before release)
+    tier: 1
+    depends_on: [mitre-attack-enterprise]
+
+  - id: scf
+    loader: scf
+    name: Secure Controls Framework (control catalog + crosswalks)
+    publisher: SCF Council
+    # SCF is distributed from securecontrolsframework.com. Download the
+    # current release workbook and set `url` (or drop it in sources/raw/ as
+    # `file`). Column headers change between releases: see scf_columns.yaml.
+    url: ""
+    file: scf.xlsx
+    license: CC BY 4.0 (attribution required, see NOTICE)
+    tier: 1
+    manual: true
+
+  - id: cisa-kev
+    loader: kev
+    name: CISA Known Exploited Vulnerabilities catalog
+    publisher: CISA
+    url: https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json
+    file: kev.json
+    license: Public domain (U.S. Government work)
+    tier: 2
+    depends_on: [mitre-cwe]
+
+  - id: first-epss
+    loader: epss
+    name: FIRST EPSS daily scores
+    publisher: FIRST
+    url: https://epss.empiricalsecurity.com/epss_scores-current.csv.gz
+    file: epss_scores-current.csv.gz
+    license: Free to use with attribution (see first.org/epss)
+    tier: 2
+
+  - id: cgraph-curated
+    loader: curated
+    name: compliance-graph curated code-to-control mappings
+    publisher: compliance-graph contributors
+    url: ""
+    file: ""
+    license: Apache-2.0
+    tier: 1
+    local: true
+    depends_on: [mitre-cwe, nist-800-53-r5, mitre-atlas]
+
+# Roadmap (loaders not yet implemented — good first contributions):
+#   OWASP ASVS 5.0 (CC BY-SA 4.0), MITRE D3FEND (OWL via n10s),
+#   NIST CSF 2.0 / SSDF / AI RMF via NIST CPRT exports, CIS/ISO/SOC2 BYOL text importers.

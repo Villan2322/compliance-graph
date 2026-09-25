@@ -1,0 +1,461 @@
+# CWE -> NIST SP 800-53 r5. Crosswalk to ISO/SOC 2/PCI/etc. happens through SCF.
+version: 0.1.0
+note: 'Curated by compliance-graph contributors. Every line starts reviewed: false. A qualified reviewer flips it
+  after checking the rationale against the control text. Unreviewed edges carry flaggedForReview=true in the graph
+  and are labeled as such in RCM output.'
+mappings:
+- cwe: CWE-20
+  name: Improper Input Validation
+  reviewed: false
+  controls:
+  - id: SI-10
+    confidence: 0.95
+    why: 'Direct: validate all inputs for syntax and semantics.'
+- cwe: CWE-79
+  name: Cross-site Scripting
+  reviewed: false
+  controls:
+  - id: SI-10
+    confidence: 0.8
+    why: Input validation at trust boundaries.
+  - id: SI-15
+    confidence: 0.8
+    why: Output filtering/encoding is the primary XSS defense.
+  - id: SA-11(1)
+    confidence: 0.6
+    why: Static analysis catches reflected/stored XSS sinks.
+- cwe: CWE-89
+  name: SQL Injection
+  reviewed: false
+  controls:
+  - id: SI-10(6)
+    confidence: 0.9
+    why: 'Injection prevention: parameterized queries.'
+  - id: SI-10
+    confidence: 0.85
+    why: Input validation.
+  - id: SA-11(1)
+    confidence: 0.6
+    why: Static analysis in CI.
+- cwe: CWE-78
+  name: OS Command Injection
+  reviewed: false
+  controls:
+  - id: SI-10(6)
+    confidence: 0.9
+    why: Injection prevention.
+  - id: SI-10
+    confidence: 0.85
+    why: Input validation.
+  - id: CM-7
+    confidence: 0.5
+    why: 'Least functionality: avoid shelling out.'
+- cwe: CWE-77
+  name: Command Injection
+  reviewed: false
+  controls:
+  - id: SI-10(6)
+    confidence: 0.9
+    why: Injection prevention.
+  - id: SI-10
+    confidence: 0.8
+    why: Input validation.
+- cwe: CWE-94
+  name: Code Injection
+  reviewed: false
+  controls:
+  - id: SI-10(6)
+    confidence: 0.85
+    why: Injection prevention.
+  - id: SI-10
+    confidence: 0.8
+    why: Input validation.
+  - id: CM-7
+    confidence: 0.5
+    why: Disable dynamic evaluation features.
+- cwe: CWE-22
+  name: Path Traversal
+  reviewed: false
+  controls:
+  - id: SI-10
+    confidence: 0.8
+    why: Canonicalize and validate paths.
+  - id: AC-3
+    confidence: 0.7
+    why: Enforce access to files by authorization, not path.
+- cwe: CWE-352
+  name: Cross-Site Request Forgery
+  reviewed: false
+  controls:
+  - id: SC-23
+    confidence: 0.8
+    why: Session authenticity (anti-CSRF tokens, SameSite).
+  - id: SI-10
+    confidence: 0.5
+    why: Validate request origin.
+- cwe: CWE-434
+  name: Unrestricted File Upload
+  reviewed: false
+  controls:
+  - id: SI-10(5)
+    confidence: 0.8
+    why: Restrict inputs to approved formats.
+  - id: SI-3
+    confidence: 0.7
+    why: Malicious code scanning on upload.
+- cwe: CWE-502
+  name: Deserialization of Untrusted Data
+  reviewed: false
+  controls:
+  - id: SI-10(5)
+    confidence: 0.8
+    why: Only deserialize trusted sources/formats.
+  - id: SI-10
+    confidence: 0.7
+    why: Input validation.
+  - id: SI-7
+    confidence: 0.6
+    why: Integrity verification of serialized data.
+- cwe: CWE-918
+  name: Server-Side Request Forgery
+  reviewed: false
+  controls:
+  - id: SC-7
+    confidence: 0.7
+    why: Egress boundary protection.
+  - id: AC-4
+    confidence: 0.7
+    why: Information flow enforcement to internal networks.
+  - id: SI-10
+    confidence: 0.7
+    why: Validate/allowlist outbound URLs.
+- cwe: CWE-611
+  name: XML External Entity
+  reviewed: false
+  controls:
+  - id: SI-10
+    confidence: 0.8
+    why: Validate XML input.
+  - id: CM-6
+    confidence: 0.6
+    why: 'Secure parser configuration: disable external entities.'
+- cwe: CWE-601
+  name: Open Redirect
+  reviewed: false
+  controls:
+  - id: SI-10
+    confidence: 0.75
+    why: Allowlist redirect targets.
+- cwe: CWE-287
+  name: Improper Authentication
+  reviewed: false
+  controls:
+  - id: IA-2
+    confidence: 0.85
+    why: Identify and authenticate users.
+- cwe: CWE-306
+  name: Missing Authentication for Critical Function
+  reviewed: false
+  controls:
+  - id: IA-2
+    confidence: 0.8
+    why: Authenticate before critical functions.
+  - id: AC-3
+    confidence: 0.8
+    why: Enforce access on every sensitive endpoint.
+- cwe: CWE-307
+  name: Excessive Authentication Attempts
+  reviewed: false
+  controls:
+  - id: AC-7
+    confidence: 0.9
+    why: Unsuccessful logon attempt limits.
+- cwe: CWE-521
+  name: Weak Password Requirements
+  reviewed: false
+  controls:
+  - id: IA-5(1)
+    confidence: 0.9
+    why: Password-based authentication requirements.
+- cwe: CWE-613
+  name: Insufficient Session Expiration
+  reviewed: false
+  controls:
+  - id: AC-12
+    confidence: 0.85
+    why: Session termination.
+- cwe: CWE-862
+  name: Missing Authorization
+  reviewed: false
+  controls:
+  - id: AC-3
+    confidence: 0.9
+    why: Access enforcement.
+  - id: AC-6
+    confidence: 0.6
+    why: Least privilege.
+- cwe: CWE-863
+  name: Incorrect Authorization
+  reviewed: false
+  controls:
+  - id: AC-3
+    confidence: 0.9
+    why: Access enforcement.
+  - id: AC-6
+    confidence: 0.7
+    why: Least privilege.
+- cwe: CWE-269
+  name: Improper Privilege Management
+  reviewed: false
+  controls:
+  - id: AC-6
+    confidence: 0.9
+    why: Least privilege.
+- cwe: CWE-276
+  name: Incorrect Default Permissions
+  reviewed: false
+  controls:
+  - id: AC-6
+    confidence: 0.8
+    why: Least privilege.
+  - id: CM-6
+    confidence: 0.7
+    why: Secure configuration baselines.
+- cwe: CWE-915
+  name: Mass Assignment
+  reviewed: false
+  controls:
+  - id: AC-3
+    confidence: 0.7
+    why: Authorize each writable field.
+  - id: SI-10
+    confidence: 0.7
+    why: Allowlist bindable properties.
+- cwe: CWE-798
+  name: Hard-coded Credentials
+  reviewed: false
+  controls:
+  - id: IA-5(7)
+    confidence: 0.95
+    why: No embedded unencrypted static authenticators.
+  - id: IA-5
+    confidence: 0.8
+    why: Authenticator management and rotation.
+  - id: SC-12
+    confidence: 0.5
+    why: Key management when the secret is a key.
+- cwe: CWE-259
+  name: Hard-coded Password
+  reviewed: false
+  controls:
+  - id: IA-5(7)
+    confidence: 0.95
+    why: No embedded unencrypted static authenticators.
+- cwe: CWE-321
+  name: Hard-coded Cryptographic Key
+  reviewed: false
+  controls:
+  - id: SC-12
+    confidence: 0.85
+    why: Cryptographic key management.
+  - id: IA-5(7)
+    confidence: 0.7
+    why: No embedded static authenticators.
+- cwe: CWE-311
+  name: Missing Encryption of Sensitive Data
+  reviewed: false
+  controls:
+  - id: SC-28
+    confidence: 0.8
+    why: Protect information at rest.
+  - id: SC-8
+    confidence: 0.8
+    why: Protect information in transit.
+- cwe: CWE-312
+  name: Cleartext Storage of Sensitive Information
+  reviewed: false
+  controls:
+  - id: SC-28
+    confidence: 0.9
+    why: Protection of information at rest.
+- cwe: CWE-319
+  name: Cleartext Transmission
+  reviewed: false
+  controls:
+  - id: SC-8
+    confidence: 0.9
+    why: Transmission confidentiality.
+  - id: SC-8(1)
+    confidence: 0.85
+    why: Cryptographic protection in transit.
+- cwe: CWE-295
+  name: Improper Certificate Validation
+  reviewed: false
+  controls:
+  - id: SC-8
+    confidence: 0.8
+    why: TLS must validate peers.
+  - id: SC-17
+    confidence: 0.6
+    why: PKI certificate handling.
+- cwe: CWE-327
+  name: Broken or Risky Crypto Algorithm
+  reviewed: false
+  controls:
+  - id: SC-13
+    confidence: 0.9
+    why: Use approved cryptography.
+- cwe: CWE-328
+  name: Weak Hash
+  reviewed: false
+  controls:
+  - id: SC-13
+    confidence: 0.85
+    why: Approved cryptography.
+  - id: IA-5(1)
+    confidence: 0.6
+    why: Password storage must use salted, slow hashes.
+- cwe: CWE-330
+  name: Insufficiently Random Values
+  reviewed: false
+  controls:
+  - id: SC-13
+    confidence: 0.7
+    why: Use a CSPRNG for security values.
+- cwe: CWE-209
+  name: Error Message Information Exposure
+  reviewed: false
+  controls:
+  - id: SI-11
+    confidence: 0.9
+    why: Error handling that does not leak internals.
+- cwe: CWE-200
+  name: Exposure of Sensitive Information
+  reviewed: false
+  controls:
+  - id: AC-3
+    confidence: 0.6
+    why: Access enforcement.
+  - id: AC-4
+    confidence: 0.6
+    why: Information flow enforcement.
+- cwe: CWE-532
+  name: Sensitive Information in Log Files
+  reviewed: false
+  controls:
+  - id: AU-3(3)
+    confidence: 0.8
+    why: Limit PII in audit records.
+  - id: AU-9
+    confidence: 0.6
+    why: Protect audit information.
+- cwe: CWE-117
+  name: Log Injection
+  reviewed: false
+  controls:
+  - id: SI-10
+    confidence: 0.7
+    why: Neutralize log input.
+  - id: AU-9
+    confidence: 0.6
+    why: Protect audit integrity.
+- cwe: CWE-400
+  name: Uncontrolled Resource Consumption
+  reviewed: false
+  controls:
+  - id: SC-5
+    confidence: 0.85
+    why: Denial-of-service protection.
+- cwe: CWE-770
+  name: Allocation Without Limits
+  reviewed: false
+  controls:
+  - id: SC-5
+    confidence: 0.8
+    why: 'Denial-of-service protection: rate and size limits.'
+- cwe: CWE-942
+  name: Permissive CORS Policy
+  reviewed: false
+  controls:
+  - id: AC-4
+    confidence: 0.7
+    why: Information flow enforcement.
+  - id: CM-6
+    confidence: 0.6
+    why: Secure configuration.
+- cwe: CWE-489
+  name: Active Debug Code
+  reviewed: false
+  controls:
+  - id: CM-6
+    confidence: 0.8
+    why: Secure configuration settings.
+  - id: CM-7
+    confidence: 0.7
+    why: Least functionality.
+- cwe: CWE-787
+  name: Out-of-bounds Write
+  reviewed: false
+  controls:
+  - id: SI-16
+    confidence: 0.7
+    why: Memory protection.
+  - id: SA-11(1)
+    confidence: 0.6
+    why: Static analysis.
+- cwe: CWE-125
+  name: Out-of-bounds Read
+  reviewed: false
+  controls:
+  - id: SI-16
+    confidence: 0.7
+    why: Memory protection.
+  - id: SA-11(1)
+    confidence: 0.6
+    why: Static analysis.
+- cwe: CWE-1395
+  name: Dependency on Vulnerable Third-Party Component
+  reviewed: false
+  controls:
+  - id: SI-2
+    confidence: 0.9
+    why: Flaw remediation.
+  - id: RA-5
+    confidence: 0.85
+    why: Vulnerability scanning.
+  - id: SR-3
+    confidence: 0.6
+    why: Supply chain controls.
+  - id: SA-15(7)
+    confidence: 0.6
+    why: Automated vulnerability analysis in the pipeline.
+- cwe: CWE-1104
+  name: Use of Unmaintained Third-Party Components
+  reviewed: false
+  controls:
+  - id: SA-22
+    confidence: 0.9
+    why: Unsupported system components.
+- cwe: CWE-1427
+  name: Improper Neutralization of Input Used for LLM Prompting
+  reviewed: false
+  controls:
+  - id: SI-10
+    confidence: 0.7
+    why: Treat model input as untrusted; separate instructions from data.
+  - id: SI-10(6)
+    confidence: 0.6
+    why: Injection prevention applied to prompts.
+  - id: AC-6
+    confidence: 0.5
+    why: Least privilege for tools the model can call.
+- cwe: CWE-1426
+  name: Improper Validation of Generative AI Output
+  reviewed: false
+  controls:
+  - id: SI-15
+    confidence: 0.75
+    why: Filter/validate model output before use.
+  - id: SI-10
+    confidence: 0.6
+    why: Validate model output as input to downstream sinks.

@@ -1,0 +1,21 @@
+# SCF workbook column map. SCF renames columns between releases, so the
+# loader matches headers by case-insensitive regex. After downloading a new
+# release, run `cgraph scf-headers` and update any pattern that misses.
+sheet: "SCF 20"            # regex; first sheet whose name matches
+control_id: '^SCF\s*#$'
+control_title: '^SCF\s*Control$'
+control_text: 'Secure Controls Framework .*Control Description'
+domain: '^SCF\s*Domain$'
+weight: 'Relative Control Weighting'
+# frameworkId -> header regex. Cells hold newline/comma separated native IDs.
+frameworks:
+  NIST-800-53-r5: '^NIST\s*800-53\s*R(ev)?\s*5$|^NIST 800-53 rev5$'
+  NIST-CSF-2.0:   '^NIST\s*CSF\s*v?2\.0$'
+  NIST-SSDF-1.1:  '^NIST\s*800-218.*'
+  NIST-AI-RMF-1.0: '^NIST\s*AI\s*RMF.*'
+  ISO-27001-2022: '^ISO\s*27001\s*v?2022$'
+  SOC2-TSC-2017:  'AICPA\s*TSC.*SOC\s*2'
+  PCI-DSS-4.0:    '^PCI\s*DSS\s*v?4\.0'
+  CIS-v8.1:       '^CIS\s*CSC\s*v?8\.1$'
+  HIPAA-SR:       'HIPAA.*Security Rule'
+  OWASP-ASVS-5.0: 'OWASP.*ASVS'

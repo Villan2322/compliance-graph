@@ -1,0 +1,21 @@
+compliance-graph
+Copyright 2026 compliance-graph contributors. Licensed under Apache-2.0.
+
+This project downloads and redistributes (in prebuilt graph dumps) data from:
+
+- NIST SP 800-53 Rev. 5 (OSCAL). U.S. Government work, not subject to copyright in the U.S.
+- MITRE ATT&CK®. © The MITRE Corporation. Reproduced and distributed with the permission of
+  The MITRE Corporation under the ATT&CK Terms of Use.
+- CWE™ and CAPEC™. © The MITRE Corporation. Used under the CWE and CAPEC Terms of Use.
+- MITRE ATLAS™. © The MITRE Corporation. See https://github.com/mitre-atlas/atlas-data for license.
+- MITRE Center for Threat-Informed Defense Mappings Explorer. See upstream repository for license.
+- Secure Controls Framework (SCF). © SCF Council. Licensed CC BY 4.0.
+  https://securecontrolsframework.com
+- CISA Known Exploited Vulnerabilities Catalog. U.S. Government work.
+- EPSS scores. FIRST.org. https://www.first.org/epss
+
+ISO/IEC 27001, AICPA Trust Services Criteria, PCI DSS and CIS Controls are referenced by
+identifier only. Their text is not included. ATT&CK, CWE, CAPEC and ATLAS are trademarks
+of The MITRE Corporation. No endorsement by any source organization is implied.
+
+Before publishing a release, re-check each upstream license (see sources/manifest.yaml).

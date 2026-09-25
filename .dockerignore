@@ -1,0 +1,9 @@
+.git
+.env
+sources/raw
+out
+state
+dumps
+.venv
+**/__pycache__
+.pytest_cache

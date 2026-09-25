@@ -1,0 +1,8 @@
+# The eval passes when every expected CWE is found (recall) and each maps
+# to at least `min_controls` NIST requirements through the graph.
+target: eval/vulnerable_app
+min_controls: 1
+expected_cwes:
+  semgrep: [CWE-89, CWE-78, CWE-94, CWE-502, CWE-295, CWE-328, CWE-330, CWE-489, CWE-1427]
+  gitleaks: [CWE-798]
+  osv-scanner: [CWE-1395]

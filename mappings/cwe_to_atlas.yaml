@@ -1,0 +1,9 @@
+# CWE -> MITRE ATLAS technique links for LLM/agent weaknesses.
+# Curated, reviewed: false until a maintainer confirms.
+links:
+  - {cwe: CWE-1427, atlas: AML.T0051, why: "Unneutralized prompt input is the precondition for LLM prompt injection."}
+  - {cwe: CWE-1427, atlas: AML.T0054, why: "Same weakness enables jailbreak attempts."}
+  - {cwe: CWE-1427, atlas: AML.T0093, why: "Prompt infiltration via a public-facing application."}
+  - {cwe: CWE-1426, atlas: AML.T0067, why: "Unvalidated output lets attackers manipulate trusted output components."}
+  - {cwe: CWE-1426, atlas: AML.T0057, why: "Unfiltered output can leak sensitive data."}
+  - {cwe: CWE-798,  atlas: AML.T0083, why: "Credentials embedded in agent configuration."}

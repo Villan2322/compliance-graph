@@ -1,0 +1,105 @@
+# compliance-graph starter rules. Every rule MUST carry metadata.cwe —
+# that is the join key into the knowledge graph. Add registry packs with
+# CGRAPH_SEMGREP_CONFIGS (e.g. "p/python p/owasp-top-ten"); their CWE
+# metadata is parsed the same way.
+rules:
+  - id: cg-py-sql-string-format
+    languages: [python]
+    severity: ERROR
+    message: SQL built with string formatting. Use parameterized queries.
+    metadata: {cwe: ["CWE-89"], category: security}
+    patterns:
+      - pattern-either:
+          - pattern: $CUR.execute(f"...", ...)
+          - pattern: $CUR.execute("..." % $X, ...)
+          - pattern: $CUR.execute("..." + $X, ...)
+          - pattern: $CUR.execute("...".format(...), ...)
+
+  - id: cg-py-subprocess-shell
+    languages: [python]
+    severity: ERROR
+    message: subprocess with shell=True. Pass an argument list instead.
+    metadata: {cwe: ["CWE-78"], category: security}
+    pattern-either:
+      - pattern: subprocess.$F(..., shell=True, ...)
+      - pattern: os.system(...)
+
+  - id: cg-py-eval
+    languages: [python]
+    severity: ERROR
+    message: eval/exec on dynamic input enables code injection.
+    metadata: {cwe: ["CWE-94"], category: security}
+    patterns:
+      - pattern-either:
+          - pattern: eval($X)
+          - pattern: exec($X)
+      - pattern-not: eval("...")
+      - pattern-not: exec("...")
+
+  - id: cg-py-pickle-load
+    languages: [python]
+    severity: ERROR
+    message: pickle on untrusted data allows arbitrary code execution.
+    metadata: {cwe: ["CWE-502"], category: security}
+    pattern-either:
+      - pattern: pickle.loads(...)
+      - pattern: pickle.load(...)
+
+  - id: cg-py-yaml-unsafe-load
+    languages: [python]
+    severity: ERROR
+    message: yaml.load without SafeLoader. Use yaml.safe_load.
+    metadata: {cwe: ["CWE-502"], category: security}
+    patterns:
+      - pattern: yaml.load(...)
+      - pattern-not: yaml.load(..., Loader=yaml.SafeLoader, ...)
+      - pattern-not: yaml.load(..., Loader=SafeLoader, ...)
+
+  - id: cg-py-requests-verify-false
+    languages: [python]
+    severity: WARNING
+    message: TLS verification disabled.
+    metadata: {cwe: ["CWE-295"], category: security}
+    pattern: requests.$M(..., verify=False, ...)
+
+  - id: cg-py-weak-hash
+    languages: [python]
+    severity: WARNING
+    message: MD5/SHA1 are not acceptable for security purposes.
+    metadata: {cwe: ["CWE-328"], category: security}
+    pattern-either:
+      - pattern: hashlib.md5(...)
+      - pattern: hashlib.sha1(...)
+
+  - id: cg-py-flask-debug
+    languages: [python]
+    severity: WARNING
+    message: Flask debug mode exposes an interactive debugger.
+    metadata: {cwe: ["CWE-489"], category: security}
+    pattern: $APP.run(..., debug=True, ...)
+
+  - id: cg-py-insecure-random-token
+    languages: [python]
+    severity: WARNING
+    message: random module is not cryptographically secure. Use secrets.
+    metadata: {cwe: ["CWE-330"], category: security}
+    pattern-either:
+      - pattern: random.random()
+      - pattern: random.randint(...)
+      - pattern: random.choice(...)
+
+  - id: cg-py-llm-prompt-concat
+    languages: [python]
+    severity: WARNING
+    message: Untrusted request data concatenated into an LLM prompt. Separate instructions from data and treat model output as untrusted.
+    metadata: {cwe: ["CWE-1427"], category: security}
+    patterns:
+      - pattern-either:
+          - pattern: |
+              $P = f"...{request.$A[...]}..."
+              ...
+              $CLIENT.$M.create(..., messages=[..., {"role": $R, "content": $P}, ...], ...)
+          - pattern: |
+              $P = f"...{request.$A.get(...)}..."
+              ...
+              $CLIENT.$M.create(..., messages=[..., {"role": $R, "content": $P}, ...], ...)

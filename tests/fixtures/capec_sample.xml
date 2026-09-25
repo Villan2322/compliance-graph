@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Attack_Pattern_Catalog xmlns="http://capec.mitre.org/capec-3" Name="CAPEC" Version="3.9" Date="2023-01-24">
+  <Attack_Patterns>
+    <Attack_Pattern ID="66" Name="SQL Injection" Abstraction="Standard" Status="Draft">
+      <Description>This attack exploits target software that constructs SQL statements based on user input.</Description>
+      <Likelihood_Of_Attack>High</Likelihood_Of_Attack>
+      <Typical_Severity>High</Typical_Severity>
+      <Related_Weaknesses><Related_Weakness CWE_ID="89"/><Related_Weakness CWE_ID="20"/></Related_Weaknesses>
+      <Taxonomy_Mappings>
+        <Taxonomy_Mapping Taxonomy_Name="ATTACK"><Entry_ID>1190</Entry_ID><Entry_Name>Exploit Public-Facing Application</Entry_Name></Taxonomy_Mapping>
+        <Taxonomy_Mapping Taxonomy_Name="WASC"><Entry_ID>19</Entry_ID></Taxonomy_Mapping>
+      </Taxonomy_Mappings>
+    </Attack_Pattern>
+    <Attack_Pattern ID="2" Name="Gone" Abstraction="Standard" Status="Deprecated"><Description>x</Description></Attack_Pattern>
+  </Attack_Patterns>
+</Attack_Pattern_Catalog>

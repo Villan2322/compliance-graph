@@ -1,0 +1,73 @@
+# Topics a coding agent asks about BEFORE writing code (MCP: secure_coding_checklist).
+# keywords feed simple matching; cwes link into the graph for controls + attack paths.
+topics:
+  - id: authn
+    name: Authentication and passwords
+    keywords: [login, signin, password, auth, jwt, oauth, mfa, token]
+    cwes: [CWE-287, CWE-306, CWE-307, CWE-521, CWE-798, CWE-328]
+    guidance: Use a vetted auth library. Hash passwords with argon2id or bcrypt. Rate-limit and lock out. Never hard-code credentials.
+  - id: authz
+    name: Authorization and access control
+    keywords: [permission, role, rbac, admin, owner, tenant, acl, policy]
+    cwes: [CWE-862, CWE-863, CWE-269, CWE-276, CWE-915]
+    guidance: Deny by default. Check authorization server-side on every request and every object. Scope queries by tenant.
+  - id: sessions
+    name: Sessions and CSRF
+    keywords: [session, cookie, csrf, samesite, logout, expiry]
+    cwes: [CWE-352, CWE-613]
+    guidance: Secure, HttpOnly, SameSite cookies. Anti-CSRF tokens on state-changing requests. Expire idle sessions.
+  - id: database
+    name: Database queries
+    keywords: [sql, query, orm, database, postgres, mysql, sqlite, cypher, mongo]
+    cwes: [CWE-89, CWE-20]
+    guidance: Parameterize every query, including Cypher. Never build queries with string formatting.
+  - id: shell
+    name: Running processes and dynamic code
+    keywords: [subprocess, exec, shell, eval, command, os.system, spawn]
+    cwes: [CWE-78, CWE-77, CWE-94]
+    guidance: Avoid shell=True. Pass argument lists. Never eval untrusted input.
+  - id: files
+    name: File paths and uploads
+    keywords: [upload, file, path, download, filename, s3, storage]
+    cwes: [CWE-22, CWE-434]
+    guidance: Canonicalize paths and confine to a base directory. Allowlist types, cap sizes, scan uploads, store outside web root.
+  - id: http-client
+    name: Outbound HTTP and URL fetching
+    keywords: [fetch, requests, http, url, webhook, proxy, callback]
+    cwes: [CWE-918, CWE-295, CWE-601]
+    guidance: Allowlist destinations. Block internal and metadata IP ranges. Keep TLS verification on.
+  - id: serialization
+    name: Parsing and deserialization
+    keywords: [pickle, yaml, deserialize, xml, json, marshal, parse]
+    cwes: [CWE-502, CWE-611]
+    guidance: Use safe loaders (yaml.safe_load). Never unpickle untrusted data. Disable XML external entities.
+  - id: crypto
+    name: Cryptography and secrets
+    keywords: [encrypt, decrypt, hash, key, random, secret, tls, kms]
+    cwes: [CWE-327, CWE-328, CWE-330, CWE-321, CWE-311, CWE-312, CWE-319]
+    guidance: Use platform crypto libraries and a secrets manager. CSPRNG for tokens. TLS everywhere. Encrypt sensitive data at rest.
+  - id: logging
+    name: Logging and error handling
+    keywords: [log, logger, error, exception, stacktrace, debug]
+    cwes: [CWE-532, CWE-117, CWE-209, CWE-489]
+    guidance: Never log secrets or PII. Neutralize user input in logs. Generic errors to users, detail to logs. Debug off in prod.
+  - id: availability
+    name: Limits and abuse resistance
+    keywords: [rate, limit, pagination, batch, timeout, dos, quota]
+    cwes: [CWE-400, CWE-770]
+    guidance: Rate-limit, paginate, cap payload sizes, and set timeouts on every external call.
+  - id: web-config
+    name: Web configuration
+    keywords: [cors, headers, csp, config, cookie, debug]
+    cwes: [CWE-942, CWE-489, CWE-79]
+    guidance: Explicit CORS origins. Security headers and CSP. Encode output by context.
+  - id: dependencies
+    name: Dependencies and supply chain
+    keywords: [dependency, package, npm, pip, library, sbom, version, lockfile]
+    cwes: [CWE-1395, CWE-1104]
+    guidance: Pin and lock versions. Scan with OSV in CI. Prefer maintained packages. Generate an SBOM.
+  - id: llm
+    name: LLM and agent integration
+    keywords: [llm, prompt, agent, rag, tool, model, openai, anthropic, claude, embedding]
+    cwes: [CWE-1427, CWE-1426, CWE-94, CWE-918]
+    guidance: Treat retrieved content and user input as untrusted. Separate instructions from data. Validate model output before it reaches a sink. Give tools least privilege and require confirmation for destructive actions.

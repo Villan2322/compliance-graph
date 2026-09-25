@@ -1,0 +1,8 @@
+# Per-repo context the audit loop uses for impact/likelihood. Copy into any repo you audit.
+repo_id: eval/vulnerable_app
+asset_name: Vulnerable demo API
+internet_facing: true
+data_classification: confidential   # public | internal | confidential | restricted | regulated
+data_description: customer records
+control_owner: AppSec (eval)
+skip_tools: []

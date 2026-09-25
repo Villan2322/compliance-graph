@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "compliance-graph"
+version = "0.1.0"
+description = "Security & compliance knowledge graph (NIST, SCF, MITRE CWE/CAPEC/ATT&CK/ATLAS, KEV, EPSS) for coding agents, with a LangGraph audit loop that emits a risk control matrix."
+readme = "README.md"
+license = {text = "Apache-2.0"}
+requires-python = ">=3.11"
+dependencies = [
+  "neo4j>=5.28,<7",
+  "langgraph>=1.0,<2",
+  "langgraph-checkpoint-sqlite>=3.0",
+  "langchain>=1.0,<2",
+  "mcp>=1.20,<2",
+  "pyyaml>=6",
+  "openpyxl>=3.1",
+]
+
+[project.optional-dependencies]
+scan = ["semgrep>=1.100"]
+llm = ["langchain-ollama>=1.0", "langchain-anthropic>=1.0"]
+embed = ["fastembed>=0.5"]
+dev = ["pytest>=8"]
+all = ["compliance-graph[scan,llm,embed,dev]"]
+
+[project.scripts]
+cgraph = "cgraph.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["cgraph*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

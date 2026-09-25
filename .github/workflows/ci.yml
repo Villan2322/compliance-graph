@@ -1,0 +1,51 @@
+name: ci
+on:
+  push:
+  pull_request:
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: pip install ".[dev,scan]"
+      - run: python -m pytest -q
+      - run: docker compose config -q
+        env: {NEO4J_PASSWORD: ci}
+
+  graph:
+    # Builds the real graph in a Neo4j service container and runs the eval.
+    runs-on: ubuntu-latest
+    services:
+      neo4j:
+        image: neo4j:5.26-community
+        env:
+          NEO4J_AUTH: neo4j/ci-password-123
+        ports: ["7687:7687"]
+        options: >-
+          --health-cmd "cypher-shell -u neo4j -p ci-password-123 'RETURN 1'"
+          --health-interval 10s --health-timeout 10s --health-retries 30
+    env:
+      NEO4J_URI: bolt://localhost:7687
+      NEO4J_PASSWORD: ci-password-123
+      CGRAPH_OUT_DIR: out
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: pip install ".[dev,scan]"
+      - name: scanners
+        run: |
+          curl -fsSL https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz | sudo tar -xz -C /usr/local/bin gitleaks
+          sudo curl -fsSL -o /usr/local/bin/osv-scanner https://github.com/google/osv-scanner/releases/download/v2.6.0/osv-scanner_linux_amd64
+          sudo chmod +x /usr/local/bin/osv-scanner
+      - run: cgraph init
+      - run: cgraph fetch
+      - run: cgraph ingest
+      - run: cgraph verify
+      - run: python scripts/run_eval.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: audit-output, path: out/}

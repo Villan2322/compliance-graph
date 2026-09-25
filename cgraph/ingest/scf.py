@@ -25,7 +25,9 @@ def _cfg() -> dict:
 def _find(headers: list[str], pattern: str) -> int | None:
     rx = re.compile(pattern, re.I)
     for i, h in enumerate(headers):
-        if h and rx.search(str(h).strip()):
+        # SCF headers routinely span multiple lines (e.g. "NIST\n800-53\nR5.2");
+        # collapse to single-spaced text so patterns match across the break.
+        if h and rx.search(re.sub(r"\s+", " ", str(h)).strip()):
             return i
     return None
 

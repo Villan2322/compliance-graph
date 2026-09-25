@@ -9,7 +9,9 @@ This project downloads and redistributes (in prebuilt graph dumps) data from:
 - CWE™ and CAPEC™. © The MITRE Corporation. Used under the CWE and CAPEC Terms of Use.
 - MITRE ATLAS™. © The MITRE Corporation. See https://github.com/mitre-atlas/atlas-data for license.
 - MITRE Center for Threat-Informed Defense Mappings Explorer. See upstream repository for license.
-- Secure Controls Framework (SCF). © SCF Council. Licensed CC BY 4.0.
+- Secure Controls Framework (SCF). © Secure Controls Framework Council, LLC. Licensed
+  CC BY-ND 4.0 (Attribution-NoDerivatives) -- NOT CC BY 4.0. No-Derivatives may restrict
+  redistributing SCF-derived graph data in a public dump; see sources/manifest.yaml.
   https://securecontrolsframework.com
 - CISA Known Exploited Vulnerabilities Catalog. U.S. Government work.
 - EPSS scores. FIRST.org. https://www.first.org/epss

@@ -77,6 +77,27 @@ def test_real_attack_ctid_atlas():
     assert any(t["atlasId"] == "AML.T0051" for t in x["techniques"])
 
 
+def test_real_scf_crosswalk():
+    # IDs only -- no ISO/AICPA/PCI control text, per CLAUDE.md rule 4.
+    from cgraph.ingest import scf
+    d = scf.parse(_need("scf.xlsx"))
+    by_scf = {}
+    for m in d["maps"]:
+        by_scf.setdefault(m["scf"], {}).setdefault(m["fw"], set()).add(m["native"])
+    expected = {
+        "GOV-02": {"NIST-800-53-r5": "PM-1", "ISO-27001-2022": "4.4",
+                   "SOC2-TSC-2017": "CC1.1", "PCI-DSS-4.0": "12.4"},
+        "GOV-04": {"NIST-800-53-r5": "AC-1", "ISO-27001-2022": "5.2",
+                   "SOC2-TSC-2017": "CC5.3", "PCI-DSS-4.0": "1.1.1"},
+        "AST-16": {"NIST-800-53-r5": "PE-22", "ISO-27001-2022": "4.3",
+                   "SOC2-TSC-2017": "CC6.1-POF1", "PCI-DSS-4.0": "A3.2.5"},
+    }
+    for sid, fws in expected.items():
+        assert sid in by_scf, f"{sid} not found in parsed SCF controls"
+        for fw, native in fws.items():
+            assert native in by_scf[sid].get(fw, set()), f"{sid} missing {fw}:{native}"
+
+
 def test_curated_capec_attack_resolve_real_ids():
     from cgraph.ingest import attack, capec as capec_ingest
     capecs = {p["capecId"] for p in capec_ingest.parse(_need("capec_latest.xml"))["patterns"]}

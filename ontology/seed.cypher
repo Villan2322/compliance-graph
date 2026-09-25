@@ -14,7 +14,7 @@ UNWIND [
   {id:'NIST-CSF-2.0',   name:'NIST Cybersecurity Framework 2.0', publisher:'NIST', tier:1, redistributable:true, kind:'framework'},
   {id:'NIST-SSDF-1.1',  name:'NIST SP 800-218 SSDF v1.1', publisher:'NIST', tier:1, redistributable:true, kind:'framework'},
   {id:'NIST-AI-RMF-1.0',name:'NIST AI RMF 1.0', publisher:'NIST', tier:1, redistributable:true, kind:'framework'},
-  {id:'SCF',            name:'Secure Controls Framework', publisher:'SCF Council', tier:1, redistributable:true, kind:'metaframework', license:'CC-BY-4.0'},
+  {id:'SCF',            name:'Secure Controls Framework', publisher:'SCF Council', tier:1, redistributable:true, kind:'metaframework', license:'CC-BY-ND-4.0'},
   {id:'OWASP-ASVS-5.0', name:'OWASP ASVS 5.0', publisher:'OWASP', tier:1, redistributable:true, kind:'standard', license:'CC-BY-SA-4.0'},
   {id:'ISO-27001-2022', name:'ISO/IEC 27001:2022', publisher:'ISO', tier:3, redistributable:false, kind:'standard'},
   {id:'SOC2-TSC-2017',  name:'AICPA Trust Services Criteria (SOC 2)', publisher:'AICPA', tier:3, redistributable:false, kind:'criteria'},

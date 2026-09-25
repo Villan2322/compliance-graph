@@ -74,9 +74,13 @@ sources:
     # SCF is distributed from securecontrolsframework.com. Download the
     # current release workbook and set `url` (or drop it in sources/raw/ as
     # `file`). Column headers change between releases: see scf_columns.yaml.
-    url: ""
+    url: https://raw.githubusercontent.com/securecontrolsframework/securecontrolsframework/main/secure-controls-framework-scf-2026-3.xlsx
     file: scf.xlsx
-    license: CC BY 4.0 (attribution required, see NOTICE)
+    # CC BY-ND 4.0 (Attribution-NoDerivatives), confirmed against
+    # https://securecontrolsframework.com/terms-and-conditions -- NOT CC BY 4.0.
+    # No-Derivatives is a real question for a public dump: see NOTICE and ask
+    # before shipping SCF-derived nodes/edges in a release asset.
+    license: CC BY-ND 4.0 (attribution required, no derivatives -- see NOTICE)
     tier: 1
     manual: true
 

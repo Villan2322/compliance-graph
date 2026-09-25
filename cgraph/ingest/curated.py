@@ -7,7 +7,7 @@ from pathlib import Path
 import yaml
 
 from ..config import ROOT
-from ..ids import cwe, nist_req
+from ..ids import attack_technique, capec, cwe, nist_req
 
 
 def _semgrep_rules() -> list[dict]:
@@ -39,7 +39,10 @@ def parse(path: Path | None = None) -> dict:
     topics = yaml.safe_load((ROOT / "mappings" / "secure_coding_topics.yaml").read_text())["topics"]
     atlas = [{"cwe": cwe(x["cwe"]), "atlas": x["atlas"], "why": x.get("why", "")}
              for x in yaml.safe_load((ROOT / "mappings" / "cwe_to_atlas.yaml").read_text())["links"]]
-    return {"edges": edges, "rules": _semgrep_rules(), "topics": topics, "atlas": atlas, "version": cm.get("version")}
+    capec_attack = [{"capec": capec(x["capec"]), "tech": attack_technique(x["attack"]), "why": x.get("why", "")}
+                     for x in yaml.safe_load((ROOT / "mappings" / "capec_to_attack.yaml").read_text())["links"]]
+    return {"edges": edges, "rules": _semgrep_rules(), "topics": topics, "atlas": atlas,
+            "capecAttack": capec_attack, "version": cm.get("version")}
 
 
 def load(graph, data: dict, spec) -> dict:
@@ -71,5 +74,10 @@ def load(graph, data: dict, spec) -> dict:
         MERGE (w)-[x:RELATES_TO]->(a)
         SET x.sourceId = $sid, x.rationale = r.why, x.reviewed = false, x.authority = 'cgraph-curated'""",
         data["atlas"], sid=sid)
+    graph.batch("""
+        UNWIND $rows AS r MATCH (a:AttackPattern {capecId: r.capec}), (t:Technique {attackId: r.tech})
+        MERGE (a)-[x:MAPS_TO]->(t)
+        SET x.sourceId = $sid, x.rationale = r.why, x.reviewed = false, x.authority = 'cgraph-curated'""",
+        data["capecAttack"], sid=sid)
     return {"cweToControl": n, "cweToAtlas": len(data["atlas"]), "rules": len(data["rules"]), "topics": len(data["topics"]),
-            "unresolved": len(missing)}
+            "capecToAttack": len(data["capecAttack"]), "unresolved": len(missing)}

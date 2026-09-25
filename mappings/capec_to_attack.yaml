@@ -1,0 +1,10 @@
+# CAPEC -> ATT&CK technique links, curated to backfill gaps in CAPEC's own
+# (sparse) Taxonomy_Mapping data. Curated, reviewed: false until a maintainer
+# confirms. IDs only -- no Tier 3 text.
+links:
+  - {capec: CAPEC-66,  attack: T1190, why: "MITRE ATT&CK T1190 (Exploit Public-Facing Application) lists SQL injection as a primary exploitation vector; CAPEC-66's own Taxonomy_Mapping omits ATT&CK."}
+  - {capec: CAPEC-7,   attack: T1190, why: "Blind SQL injection is a variant of CAPEC-66, same public-facing-application exploitation technique."}
+  - {capec: CAPEC-108, attack: T1190, why: "SQL injection used to reach OS command execution still begins with exploiting a public-facing application."}
+  - {capec: CAPEC-109, attack: T1190, why: "ORM injection is a SQL injection variant reaching the app through its public interface."}
+  - {capec: CAPEC-110, attack: T1190, why: "SOAP parameter tampering leading to SQL injection is exploitation of a public-facing application."}
+  - {capec: CAPEC-470, attack: T1190, why: "Escalation from DB access to OS control starts from the same public-facing-application exploit."}

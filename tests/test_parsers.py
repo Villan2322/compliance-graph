@@ -36,6 +36,7 @@ def test_curated_mappings_resolve_ids():
     assert rule_cwes <= mapped, f"rules detect CWEs with no control mapping: {rule_cwes - mapped}"
     topic_cwes = {c for t in d["topics"] for c in t["cwes"]}
     assert topic_cwes <= mapped, f"topics reference unmapped CWEs: {topic_cwes - mapped}"
+    assert d["capecAttack"] and all(e["capec"] and e["tech"] for e in d["capecAttack"])
 
 
 def test_cypher_files_split():
@@ -74,3 +75,12 @@ def test_real_attack_ctid_atlas():
     assert len({m["tech"] for m in c["mitigates"]} - techs) < 50  # nearly all resolve
     x = atlas.parse(_need("ATLAS.yaml"))
     assert any(t["atlasId"] == "AML.T0051" for t in x["techniques"])
+
+
+def test_curated_capec_attack_resolve_real_ids():
+    from cgraph.ingest import attack, capec as capec_ingest
+    capecs = {p["capecId"] for p in capec_ingest.parse(_need("capec_latest.xml"))["patterns"]}
+    techs = {t["attackId"] for t in attack.parse(_need("enterprise-attack.json"))["techniques"]}
+    rows = curated.parse()["capecAttack"]
+    assert not {r["capec"] for r in rows} - capecs
+    assert not {r["tech"] for r in rows} - techs

@@ -9,18 +9,18 @@ services:
       - "127.0.0.1:7687:7687"   # Bolt
     environment:
       NEO4J_AUTH: neo4j/${NEO4J_PASSWORD:?set NEO4J_PASSWORD in .env}
-      NEO4J_PASSWORD: ${NEO4J_PASSWORD}
+      CYPHER_PASSWORD: ${NEO4J_PASSWORD}
       NEO4J_PLUGINS: '["apoc"]'
       NEO4J_server_memory_heap_initial__size: ${NEO4J_HEAP:-1G}
       NEO4J_server_memory_heap_max__size: ${NEO4J_HEAP:-1G}
       NEO4J_server_memory_pagecache_size: ${NEO4J_PAGECACHE:-1G}
-      NEO4J_dbms_security_procedures__unrestricted: apoc.*
+      NEO4J_dbms_security_procedures_unrestricted: apoc.*
     volumes:
       - neo4j-data:/data
       - neo4j-logs:/logs
       - ./dumps:/dumps
     healthcheck:
-      test: ["CMD-SHELL", "cypher-shell -u neo4j -p \"$$NEO4J_PASSWORD\" 'RETURN 1' >/dev/null 2>&1 || exit 1"]
+      test: ["CMD-SHELL", "cypher-shell -u neo4j -p \"$$CYPHER_PASSWORD\" 'RETURN 1' >/dev/null 2>&1 || exit 1"]
       interval: 5s
       timeout: 10s
       retries: 60

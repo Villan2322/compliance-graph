@@ -34,7 +34,7 @@ sources:
     publisher: MITRE Center for Threat-Informed Defense
     url: https://raw.githubusercontent.com/center-for-threat-informed-defense/mappings-explorer/main/mappings/nist_800_53/attack-16.1/nist_800_53-rev5/enterprise/nist_800_53-rev5_attack-16.1-enterprise.json
     file: ctid-800-53-attack.json
-    license: Apache-2.0 (verify in upstream LICENSE before release)
+    license: Apache-2.0 (confirmed via GitHub API + LICENSE.txt)
     tier: 1
     depends_on: [nist-800-53-r5, mitre-attack-enterprise]
 
@@ -63,7 +63,7 @@ sources:
     publisher: MITRE
     url: https://raw.githubusercontent.com/mitre-atlas/atlas-data/main/dist/ATLAS.yaml
     file: ATLAS.yaml
-    license: Apache-2.0 (verify in upstream LICENSE before release)
+    license: Apache-2.0 (confirmed via upstream LICENSE)
     tier: 1
     depends_on: [mitre-attack-enterprise]
 
@@ -71,9 +71,11 @@ sources:
     loader: scf
     name: Secure Controls Framework (control catalog + crosswalks)
     publisher: SCF Council
-    # SCF is distributed from securecontrolsframework.com. Download the
-    # current release workbook and set `url` (or drop it in sources/raw/ as
-    # `file`). Column headers change between releases: see scf_columns.yaml.
+    # SCF Council's own GitHub mirror -- no gated download form. The filename
+    # is release-pinned (this is 2026.3); a new SCF release will 404 here
+    # until this URL is bumped, or drop the new file in sources/raw/scf.xlsx
+    # and `cgraph fetch` will use the cached copy instead. Column headers
+    # change between releases too: see scf_columns.yaml.
     url: https://raw.githubusercontent.com/securecontrolsframework/securecontrolsframework/main/secure-controls-framework-scf-2026-3.xlsx
     file: scf.xlsx
     # CC BY-ND 4.0 (Attribution-NoDerivatives), confirmed against
@@ -82,7 +84,6 @@ sources:
     # before shipping SCF-derived nodes/edges in a release asset.
     license: CC BY-ND 4.0 (attribution required, no derivatives -- see NOTICE)
     tier: 1
-    manual: true
 
   - id: cisa-kev
     loader: kev
@@ -100,7 +101,11 @@ sources:
     publisher: FIRST
     url: https://epss.empiricalsecurity.com/epss_scores-current.csv.gz
     file: epss_scores-current.csv.gz
-    license: Free to use with attribution (see first.org/epss)
+    # MIT, confirmed via github.com/FIRSTdotorg/epss LICENSE. The daily-scores
+    # feed above is a separate FIRST.org endpoint from that repo; its own
+    # terms weren't separately posted, so MIT is inferred, not confirmed at
+    # this exact URL.
+    license: MIT (FIRSTdotorg/epss)
     tier: 2
 
   - id: cgraph-curated

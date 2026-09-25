@@ -7,14 +7,17 @@ This project downloads and redistributes (in prebuilt graph dumps) data from:
 - MITRE ATT&CK®. © The MITRE Corporation. Reproduced and distributed with the permission of
   The MITRE Corporation under the ATT&CK Terms of Use.
 - CWE™ and CAPEC™. © The MITRE Corporation. Used under the CWE and CAPEC Terms of Use.
-- MITRE ATLAS™. © The MITRE Corporation. See https://github.com/mitre-atlas/atlas-data for license.
-- MITRE Center for Threat-Informed Defense Mappings Explorer. See upstream repository for license.
+- MITRE ATLAS™. © The MITRE Corporation. Licensed Apache-2.0 (confirmed against
+  https://github.com/mitre-atlas/atlas-data/blob/main/LICENSE).
+- MITRE Center for Threat-Informed Defense Mappings Explorer. Licensed Apache-2.0
+  (confirmed against https://github.com/center-for-threat-informed-defense/mappings-explorer/blob/main/LICENSE.txt).
 - Secure Controls Framework (SCF). © Secure Controls Framework Council, LLC. Licensed
   CC BY-ND 4.0 (Attribution-NoDerivatives) -- NOT CC BY 4.0. No-Derivatives may restrict
   redistributing SCF-derived graph data in a public dump; see sources/manifest.yaml.
   https://securecontrolsframework.com
 - CISA Known Exploited Vulnerabilities Catalog. U.S. Government work.
-- EPSS scores. FIRST.org. https://www.first.org/epss
+- EPSS scores. FIRST.org. Licensed MIT (confirmed via github.com/FIRSTdotorg/epss).
+  https://www.first.org/epss
 
 ISO/IEC 27001, AICPA Trust Services Criteria, PCI DSS and CIS Controls are referenced by
 identifier only. Their text is not included. ATT&CK, CWE, CAPEC and ATLAS are trademarks

@@ -19,7 +19,7 @@ Every run is written back to the graph, so audit history compounds.
 Needs Docker and `make`.
 
 ```bash
-git clone https://github.com/<you>/compliance-graph && cd compliance-graph
+git clone https://github.com/Villan2322/compliance-graph && cd compliance-graph
 make up
 ```
 

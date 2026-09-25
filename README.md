@@ -24,8 +24,14 @@ make up
 ```
 
 That builds the image, starts Neo4j, applies the ontology, fetches and ingests the
-sources (or loads a prebuilt dump if `CGRAPH_DUMP_URL` is set), verifies the graph,
-and starts the MCP server.
+sources (or loads the [prebuilt release dump](https://github.com/Villan2322/compliance-graph/releases)
+set via `CGRAPH_DUMP_URL` in `.env.example` -- seconds instead of minutes), verifies
+the graph, and starts the MCP server.
+
+The release dump excludes the Secure Controls Framework (SCF is CC BY-ND 4.0 --
+see `NOTICE`); everything else in the quickstart list above is included. To add SCF
+crosswalks locally: download the free workbook from `securecontrolsframework.com`,
+save it as `sources/raw/scf.xlsx`, then `cgraph ingest --only scf`.
 
 ```bash
 make verify                               # graph health checks

@@ -2,7 +2,7 @@ SHELL := /bin/bash
 TARGET ?= ./eval/vulnerable_app
 DC := docker compose
 
-.PHONY: help up down nuke init fetch ingest refresh verify audit audit-ci eval mcp-add dump restore llm test logs shell
+.PHONY: help up down nuke init fetch ingest refresh verify audit audit-ci eval mcp-add dump dump-public restore llm test logs shell
 
 help:            ## show targets
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  \033[1m%-10s\033[0m %s\n", $$1, $$2}'
@@ -44,11 +44,19 @@ eval:            ## run the known-answer eval against the vulnerable app
 mcp-add:         ## print the Claude Code command to connect the MCP server
 	@echo "claude mcp add --transport http compliance-graph http://localhost:8765/mcp"
 
-dump:            ## write dumps/neo4j.dump (attach to a GitHub release)
+dump:            ## write dumps/neo4j.dump of the graph as it currently stands
 	$(DC) stop neo4j app
 	$(DC) run --rm --no-deps neo4j neo4j-admin database dump neo4j --to-path=/dumps --overwrite-destination=true
 	$(DC) up -d neo4j app
 	@ls -lh dumps/neo4j.dump
+
+dump-public:     ## write a redistributable dumps/neo4j.dump (attach to a GitHub release)
+	@# SCF is CC BY-ND 4.0 (No-Derivatives) -- see NOTICE. Dropped from the
+	@# public dump, along with per-repo audit-run history from local testing.
+	$(DC) run --rm app cgraph purge --source scf --audit-history
+	$(MAKE) dump
+	@echo "restoring local SCF crosswalk (dropped only from the dump, not this graph)"
+	$(DC) run --rm app cgraph ingest --only scf
 
 restore:         ## load dumps/neo4j.dump (overwrites the graph)
 	$(DC) stop neo4j app

@@ -102,6 +102,24 @@ def cmd_verify(a) -> int:
     return 1 if bad else 0
 
 
+def cmd_purge(a) -> int:
+    """Remove data before writing a public release dump: nodes tagged with a
+    given sourceId (e.g. a source whose license doesn't clear redistribution),
+    and/or the audit-run layer (Repository/Component/AuditRun/Finding/Risk --
+    per-repo audit history, not general knowledge-graph content)."""
+    with _graph() as g:
+        if a.source:
+            n = g.run("MATCH (n {sourceId: $sid}) RETURN count(n) AS n", sid=a.source)[0]["n"]
+            g.run("MATCH (n {sourceId: $sid}) DETACH DELETE n", sid=a.source)
+            print(f"purged {n} node(s) tagged sourceId={a.source!r} (and their relationships)")
+        if a.audit_history:
+            n = g.run("""MATCH (n) WHERE n:Repository OR n:Component OR n:AuditRun OR n:Finding OR n:Risk
+                         RETURN count(n) AS n""")[0]["n"]
+            g.run("MATCH (n) WHERE n:Repository OR n:Component OR n:AuditRun OR n:Finding OR n:Risk DETACH DELETE n")
+            print(f"purged {n} audit-history node(s) (Repository/Component/AuditRun/Finding/Risk)")
+    return 0
+
+
 def cmd_audit(a) -> int:
     from langgraph.checkpoint.sqlite import SqliteSaver
     from langgraph.types import Command
@@ -210,6 +228,11 @@ def main(argv=None) -> int:
     m.set_defaults(fn=cmd_mcp)
     sp.add_parser("embed", help="populate vector embeddings (optional)").set_defaults(fn=cmd_embed)
     sp.add_parser("scf-headers", help="print SCF workbook headers to fix scf_columns.yaml").set_defaults(fn=cmd_scf_headers)
+    pu = sp.add_parser("purge", help="remove data before a public release dump (see NOTICE)")
+    pu.add_argument("--source", help="delete every node tagged sourceId=<id> and its relationships")
+    pu.add_argument("--audit-history", action="store_true",
+                     help="delete Repository/Component/AuditRun/Finding/Risk nodes (per-repo audit runs)")
+    pu.set_defaults(fn=cmd_purge)
     a = p.parse_args(argv)
     logging.basicConfig(level=logging.DEBUG if a.verbose else logging.INFO, format="%(levelname)s %(name)s: %(message)s")
     return a.fn(a)

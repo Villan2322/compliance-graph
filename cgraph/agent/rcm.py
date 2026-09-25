@@ -30,6 +30,7 @@ def rows(risks: list[dict]) -> list[dict]:
                                       "path": "none", "reqId": None}]
         for c in controls:
             cw = r["crosswalk"].get(c.get("reqId") or "", {})
+            scf_ids = [s for s in cw.get("scf", []) if s]
             mapped = "; ".join(sorted({f"{m['frameworkId']} {m['nativeId']}" for m in cw.get("mapped", [])}))[:1500]
             conf = c.get("confidence")
             out.append({
@@ -42,8 +43,8 @@ def rows(risks: list[dict]) -> list[dict]:
                 "Mapping Path": {"direct": "Curated CWE→control", "threat": "CWE→CAPEC→ATT&CK→control (CTID)"}.get(c.get("path"), "—"),
                 "Mapping Confidence": f"{conf:.2f}" if isinstance(conf, (int, float)) else (f"{c.get('hits')} technique path(s)" if c.get("hits") else ""),
                 "Mapping Reviewed": "Yes" if c.get("reviewed") else ("No — flagged for review" if c.get("path") == "direct" else "Upstream (CTID)"),
-                "SCF Control(s)": ", ".join(s["scfId"] for s in cw.get("scf", [])),
-                "Crosswalk (other frameworks)": mapped or "Load SCF to populate",
+                "SCF Control(s)": ", ".join(s["scfId"] for s in scf_ids),
+                "Crosswalk (other frameworks)": mapped or ("No crosswalk mapped in SCF for this control" if scf_ids else "Load SCF to populate"),
                 "Control Type": control_type(c["nativeId"]), "Control Owner": r["owner"],
                 "Test Procedure": (f"Re-run {', '.join(r['tools'])} ({', '.join(r['rules'][:3])}) on {', '.join(r['files'][:3]) or 'the component'}; "
                                    f"confirm zero findings for {r['cwe']}. Inspect the fix against {c['nativeId']} "

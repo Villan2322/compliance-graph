@@ -80,4 +80,4 @@ def load(graph, data: dict, spec) -> dict:
         SET x.sourceId = $sid, x.rationale = r.why, x.reviewed = false, x.authority = 'cgraph-curated'""",
         data["capecAttack"], sid=sid)
     return {"cweToControl": n, "cweToAtlas": len(data["atlas"]), "rules": len(data["rules"]), "topics": len(data["topics"]),
-            "capecToAttack": len(data["capecAttack"]), "unresolved": len(missing)}
+            "capecToAttack": len(data["capecAttack"]), "unresolved": len(missing), "version": data.get("version")}

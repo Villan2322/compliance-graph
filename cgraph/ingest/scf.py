@@ -100,5 +100,5 @@ def load(graph, data: dict, spec) -> dict:
         MERGE (q)-[m:MAPS_TO]->(c)
         SET m.sourceId = $sid, m.method = 'scf-crosswalk', m.strm = null, m.confidence = 0.8""",
         data["maps"], sid=sid)
-    return {"controls": len(data["controls"]), "crosswalkEdges": n,
+    return {"controls": len(data["controls"]), "crosswalkEdges": n, "version": data["sheet"],
             "sheet": data["sheet"], "missingFrameworks": ",".join(data["missingFrameworks"])}

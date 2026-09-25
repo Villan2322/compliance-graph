@@ -98,7 +98,15 @@ def fetch(spec: SourceSpec, force: bool = False) -> Path | None:
     return dest
 
 
+# Loaders don't share a version key name (each upstream format calls it
+# something different) -- checked in this priority order against the load()
+# stats dict when manifest.yaml hasn't pinned spec.version explicitly.
+_VERSION_KEYS = ("version", "catalogVersion", "attackVersion", "cweVersion",
+                 "capecVersion", "atlasVersion", "scoreDate")
+
+
 def record_source(graph, spec: SourceSpec, path: Path | None, stats: dict) -> None:
+    version = spec.version or next((str(stats[k]) for k in _VERSION_KEYS if stats.get(k)), None)
     graph.run(
         """
         MERGE (s:Source {sourceId: $id})
@@ -107,7 +115,7 @@ def record_source(graph, spec: SourceSpec, path: Path | None, stats: dict) -> No
             s.retrievedAt = datetime($ts), s.loader = $loader, s.stats = $stats
         """,
         id=spec.id, name=spec.name, publisher=spec.publisher, url=spec.url, license=spec.license,
-        tier=spec.tier, version=spec.version, loader=spec.loader,
+        tier=spec.tier, version=version, loader=spec.loader,
         sha=(sha256(path) if path and path.exists() else None),
         ts=datetime.now(timezone.utc).isoformat(),
         stats=[f"{k}={v}" for k, v in stats.items()],

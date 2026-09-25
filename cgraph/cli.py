@@ -97,8 +97,8 @@ def cmd_verify(a) -> int:
             good = ok(n)
             bad += 0 if good else 1
             print(f"{'PASS' if good else 'FAIL'}  {name:42} {n}")
-        for s in g.run("MATCH (s:Source) RETURN s.sourceId AS id, s.retrievedAt AS at ORDER BY id"):
-            print(f"      source {s['id']:26} {s['at']}")
+        for s in g.run("MATCH (s:Source) RETURN s.sourceId AS id, s.version AS version, s.retrievedAt AS at ORDER BY id"):
+            print(f"      source {s['id']:26} version={s['version'] or '?':10} retrieved={s['at']}")
     return 1 if bad else 0
 
 

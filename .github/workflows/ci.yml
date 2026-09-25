@@ -10,8 +10,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
-      - run: pip install ".[dev,scan]"
+      - run: pip install -e ".[dev,scan]"
       - run: python -m pytest -q
+      - run: cp .env.example .env
       - run: docker compose config -q
         env: {NEO4J_PASSWORD: ci}
 
@@ -35,7 +36,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
-      - run: pip install ".[dev,scan]"
+      - run: pip install -e ".[dev,scan]"
       - name: scanners
         run: |
           curl -fsSL https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz | sudo tar -xz -C /usr/local/bin gitleaks

@@ -12,7 +12,9 @@ import yaml
 from flask import Flask, request
 
 app = Flask(__name__)
-AWS_SECRET_ACCESS_KEY = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"  # CWE-798 (gitleaks)
+# Synthetic, non-functional value -- NOT the AWS docs example key, which
+# gitleaks explicitly allowlists and would make this fixture invisible to it.
+AWS_SECRET_ACCESS_KEY = "5OY7qb53U/XhMT4Y2lHNXlUX9LUju4bktWr5v8CI"  # CWE-798 (gitleaks)
 
 
 @app.route("/user")

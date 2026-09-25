@@ -4,6 +4,12 @@ services:
   neo4j:
     image: ${NEO4J_IMAGE:-neo4j:5.26-community}
     restart: unless-stopped
+    # neo4j-admin database dump refuses to run against an active logical log;
+    # it needs a clean shutdown checkpoint first. Compose's default 10s stop
+    # grace period isn't reliably enough time for that on a populated graph --
+    # `make dump`/`dump-public` stop neo4j before dumping, and a short grace
+    # period leaves the log active and the dump fails.
+    stop_grace_period: 120s
     ports:
       - "127.0.0.1:7474:7474"   # Browser: http://localhost:7474
       - "127.0.0.1:7687:7687"   # Bolt
